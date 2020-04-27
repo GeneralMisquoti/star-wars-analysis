@@ -90,7 +90,9 @@ def wc_matrix(args):
             return len(self.dict)
 
         def print(self, file_name: Optional[str] = None):
-            if file_name:
+            if len(self) == 0:
+                print("No such combinations found")
+            elif file_name:
                 for first_key in self:
                     speaker = first_key
                     for second_key in self[first_key]:
@@ -122,16 +124,13 @@ def wc_matrix(args):
                 is_speaked_to = [x for x in lower_matrix if x in speaked_to]
                 if len(is_speaker) > 0 and len(is_speaked_to) > 0:
                     sub_wc.add(line[0], line[1], count_words(line))
-        if args.only_movies:
+        if args.only_movies or args.group_per_movie:
             if len(sub_wc) > 0:
                 sub_wc.print(path.name)
-            else:
-                for i, first in enumerate(matrix)[:-1]:
-                    for second in matrix[i+1:]:
-                        print(f'{path.name};{first};{second};0')
         result_matrix.merge(sub_wc)
 
-    result_matrix.print()
+    if not args.group_per_movie:
+        result_matrix.print()
 
 
 if __name__ == "__main__":
@@ -185,11 +184,19 @@ if __name__ == "__main__":
         help="Only which movies"
     )
     word_count_matrix_parser.add_argument(
-        "--dont-resolve-groups",
+        "--dont-resolve-groups", "--drg",
         action='store_const',
         const=True,
         help="Leave speaking to groups as is"
     )
+
+    word_count_matrix_parser.add_argument(
+        "--group-per-movie", "--gpm",
+        action='store_const',
+        const=True,
+        help="Add another level to matrix by dividing the data for each movie separately"
+    )
+
     word_count_matrix_parser.set_defaults(func=wc_matrix)
 
     args = parser.parse_args()
