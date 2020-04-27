@@ -15,3 +15,38 @@ Words heard in characters’ dreams or flashbacks did not count, although dialog
 Anakin Skywalker and Darth Vader’s dialogue was counted separately for the sake of documenting the conflicted character’s relationship with others. According to the series’ timeline and for the purposes of the Times analysis, Anakin became Darth Vader when Emperor Palpatine says, “Henceforth, you shall be known as Darth Vader.” The character became Anakin Skywalker again after he threw his master down a shaft on the second Death Star.
 
 Characters in disguise or impersonating another character were counted as the actual speaker. By this rule, Darth Sidious and Palpatine were considered the same character in the prequels, as were Princess Leia Organa and Boushh, the bounty hunter she disguised herself as, in “The Return of the Jedi.” In several scenes of the “The Phantom Menace,” a handmaiden called Sabé acts as a decoy for Queen Padmé Amidala. Using visual cues on-screen— and from other sources, lines delivered by Sabé were counted separately from those said by Padmé.
+
+### Python utilities
+
+Use the `swa.py` file with Python 3.7+ to view basic statistics about the data.
+
+**Get amount of words spoken by `ANAKIN` in each movie:**
+```bash
+$ python3 swa.py wc anakin
+Character {'ANAKIN'} has 1046 words in file 01_phantom_menace.csv
+Character {'ANAKIN'} has 1525 words in file 02_attack_of_the_clones.csv
+Character {'ANAKIN'} has 1330 words in file 03_revenge_of_the_sith.csv
+Character anakin has 0 words in file 04_a_new_hope.csv
+Character anakin has 0 words in file 05_empire_strikes_back.csv
+Character {'ANAKIN'} has 48 words in file 06_return_of_the_jedi.csv
+Character anakin has 0 words in file 07_the_force_awakens.csv
+Character anakin has 0 words in file 08_the_last_jedi.csv
+```
+
+**See combinations of characters speaking to each other (by movie):**
+```bash
+$ python3 swa.py wcm anakin obi-wan --group-per-movie
+wc matrix: [anakin ✖ obi-wan]
+01_phantom_menace.csv;anakin;anakin;6
+01_phantom_menace.csv;anakin;obi-wan;17
+01_phantom_menace.csv;obi-wan;anakin;16
+02_attack_of_the_clones.csv;obi-wan;anakin;640
+02_attack_of_the_clones.csv;obi-wan;obi-wan;32
+02_attack_of_the_clones.csv;anakin;obi-wan;395
+02_attack_of_the_clones.csv;anakin;anakin;28
+03_revenge_of_the_sith.csv;anakin;obi-wan;498
+03_revenge_of_the_sith.csv;anakin;anakin;4
+03_revenge_of_the_sith.csv;obi-wan;anakin;680
+03_revenge_of_the_sith.csv;obi-wan;obi-wan;12
+04_a_new_hope.csv;obi-wan;obi-wan;11
+```
