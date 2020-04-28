@@ -50,3 +50,153 @@ wc matrix: [anakin ✖ obi-wan]
 03_revenge_of_the_sith.csv;obi-wan;obi-wan;12
 04_a_new_hope.csv;obi-wan;obi-wan;11
 ```
+
+**Convert to a format of your choosing**  
+
+    Format: `(` part number of movie `, ` first column `, ` second column `, ` fourth column 
+    `-f 1 2 3` - only first, second and third movie parts  
+    `-gpm` - alias of `--group-per-movie`  
+    `-c ANAKIN QUI-GON` - only show these characters speaking to each other  
+    `-c ANAKIN=1 QUI-GON=3` - the above, and additionaly rename this characters to the given text following `=`  
+```bash
+$ python3 swa.py cvrt "($partId, $1, $2, '$4')" -f 1 2 3 --gpm -c ANAKIN=1 QUI-GON=3
+
+```
+
+<details>
+<summary>
+View whole output
+</summary>
+```
+Format: "($partId, $1, $2, '$4')"; files: ['01_phantom_menace.csv', '02_attack_o
+f_the_clones.csv', '03_revenge_of_the_sith.csv']
+01_phantom_menace.csv:
+(1, 1, 3, 'Hi.')
+(1, 3, 1, 'Hi there.')
+(1, 1, 3, 'Your buddy here was about to be turned into orange goo. He picked a f
+ight with a Dug... an especially dangerous Dug called Sebulba.')
+(1, 3, 1, 'Thanks, my young friend.')
+(1, 1, 3, 'Here, you'll like these pallies. Here.')
+(1, 3, 1, 'Thank you.')
+(1, 1, 3, 'Do you have shelter?')
+(1, 3, 1, 'We'll head back to our ship.')
+(1, 1, 3, 'Is it far?')
+(1, 3, 1, 'It's on the outskirts.')
+(1, 1, 3, 'You'll never reach the outskirts in time. Sandstorms are very, very d
+angerous. Come on. I'll take you to my place.')
+(1, 1, 1, 'Whoops.')
+(1, 1, 3, 'I've been working on a scanner to try and locate mine.')
+(1, 1, 3, 'And they blow you up! Boom!')
+(1, 1, 3, 'Has anybody ever seen a Podrace?')
+(1, 3, 1, 'They have Podracing on Malastare. Very fast, very dangerous.')
+(1, 1, 3, 'I'm the only human who can do it.')
+(1, 3, 1, 'You must have Jedi reflexes if you race pods.')
+(1, 1, 3, 'You're a Jedi knight, aren't you?')
+(1, 3, 1, 'What makes you think that?')
+(1, 1, 3, 'I saw your laser sword. Only Jedis carry that kind of weapon.')
+(1, 3, 1, 'Perhaps I killed a Jedi and took it from him.')
+(1, 1, 3, 'I don't think so. No one can kill a Jedi.')
+(1, 3, 1, 'I wish that were so.')
+(1, 1, 3, 'I had a dream I was a Jedi. I came back here and freed all the slaves
+.')
+(1, 1, 3, 'Have you come to free us?')
+(1, 3, 1, 'No, I'm afraid not.')
+(1, 1, 3, 'I think you have. Why else would you be here?')
+(1, 3, 1, 'I can see there's no fooling you, Anakin.')
+(1, 3, 1, 'We're on our way to Coruscant, the central system in the Republic...
+on a very important mission.')
+(1, 1, 3, 'How did you end up out here in the outer rim?')
+(1, 1, 3, 'I can help. I can fix anything.')
+(1, 3, 1, 'I believe you can. But first we must acquire the parts we need.')
+(1, 1, 3, 'I built a racer. It's the fastest ever. There's a big race tomorrow o
+n Boonta Eve.')
+(1, 1, 3, 'You could enter my pod.')
+(1, 3, 1, 'Your mother's right.')
+(1, 3, 1, 'Is there anyone friendly to the Republic who can help us?')
+(1, 1, 3, 'It wasn't my fault. Really. Sebulba flashed me with his vents. I actu
+ally saved the pod, mostly.')
+(1, 3, 1, 'I think it's time we found out.')
+(1, 3, 1, 'Here, use this power charge.')
+(1, 1, 3, 'Yes, sir!')
+(1, 1, 3, 'It's working! It's working!')
+(1, 3, 1, 'Stay still, Ani. Let me clean this cut.')
+(1, 1, 3, 'There's so many. Do they all have a system of planets?')
+(1, 3, 1, 'Most of them.')
+(1, 1, 3, 'Has anyone been to 'em all?')
+(1, 3, 1, 'Not likely.')
+(1, 1, 3, 'I wanna be the frst one to see 'em all.')
+(1, 3, 1, 'There we are. Good as new.')
+(1, 1, 3, 'What are you doing?')
+(1, 3, 1, 'Checking your blood for infections. Go on. You have a big day tomorro
+w. Sleep well, Ani.')
+(1, 1, 3, 'What'd he mean by that?')
+(1, 3, 1, 'I'll tell you later.')
+(1, 3, 1, 'Of course you will.')
+(1, 3, 1, 'You all set, Ani?')
+(1, 1, 3, 'Yep.')
+(1, 3, 1, 'Right. Remember, concentrate on the moment. Feel, don't think. Use yo
+ur instincts.')
+(1, 1, 3, 'I will.')
+(1, 3, 1, 'May the Force be with you.')
+(1, 1, 1, 'Oh, no! Nooo!')
+(1, 3, 1, 'Hey. These are yours.')
+(1, 1, 1, 'Yes!')
+(1, 3, 1, 'And he has been freed.')
+(1, 1, 3, 'What? ')
+(1, 3, 1, 'You're no longer a slave.')
+(1, 1, 3, 'You mean I get to come with you in your starship?')
+(1, 3, 1, 'Anakin... training to become a Jedi is not an easy challenge... and e
+ven if you succeed, it's a hard life.')
+(1, 1, 3, 'But I wanna go. It's what I've always dreamed of doing.')
+(1, 3, 1, 'Then pack your things. We haven't much time.')
+(1, 1, 1, 'Yippee!')
+(1, 1, 3, 'What about Mom? Is she free too?')
+(1, 3, 1, 'I tried to free your mother, Ani, but Watto wouldn't have it.')
+(1, 1, 3, 'Qui-Gon, sir, wait! I'm tired!')
+(1, 3, 1, 'Anakin! Drop! Go! Tell them to take off!')
+(1, 1, 3, 'Are you all right?')
+(1, 3, 1, 'I think so.')
+(1, 3, 1, 'I'm not sure... but it was well-trained in the Jedi arts.')
+(1, 1, 3, 'What are we gonna do about it?')
+(1, 3, 1, 'We shall be patient.')
+(1, 3, 1, 'Anakin Skywalker... meet Obi-Wan Kenobi.')
+(1, 1, 3, 'Qui-Gon, sir, I don't want to be a problem.')
+(1, 3, 1, 'You won't be, Ani. I'm not allowed to train you... so I want you to w
+atch me and be mindful. Always remember: Your focus determines your reality. Sta
+y close to me and you'll be safe.')
+(1, 1, 3, 'Master, sir... I heard Yoda talking about midi-chlorians. I've been w
+ondering... What are midi-chlorians?')
+(1, 3, 1, 'Midi-chlorians are a microscopic life-form... that resides within all
+ living cells.')
+(1, 1, 3, 'They live inside me?')
+(1, 3, 1, 'Inside your cells, yes. And we are symbionts with them.')
+(1, 1, 3, 'Symbionts?')
+(1, 3, 1, 'Life-forms living together for mutual advantage. Without the midi-chl
+orians, life could not exist... and we would have no knowledge of the Force. The
+y continually speak to us... telling us the will of the Force. When you learn to
+ quiet your mind... you'll hear them speaking to you.')
+(1, 1, 3, 'I don't understand.')
+(1, 3, 1, 'With time and training, Ani, you will. You will.')
+(1, 1, 3, 'They're here!')
+(1, 3, 1, 'Once we get inside, you find a safe place to hide and stay there.')
+(1, 1, 3, 'Sure.')
+(1, 3, 1, 'Stay there.')
+(1, 3, 1, 'Ani, find cover. Quick!')
+(1, 1, 3, 'Hey, wait for me!')
+(1, 3, 1, 'Anakin, stay where you are. You'll be safe there.')
+(1, 1, 3, ' But l...')
+(1, 3, 1, 'Stay in that cockpit.')
+(1, 3, 1, 'We'll handle this.')
+
+
+02_attack_of_the_clones.csv:
+(2, 1, 1, 'But I am grown up. You said it yourself.')
+(2, 1, 1, 'You're exactly the way I remember you in my dreams.')
+(2, 1, 1, 'No. No.')
+(2, 1, 1, 'Oh, not again. Obi-Wan's gonna kill me.')
+
+
+03_revenge_of_the_sith.csv:
+(3, 1, 1, 'What have I done?')
+```
+</details>
