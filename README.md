@@ -53,20 +53,26 @@ wc matrix: [anakin ✖ obi-wan]
 
 **Convert to a format of your choosing**  
 
-    Format: `(` part number of movie `, ` first column `, ` second column `, ` fourth column 
+```bash
+$ python3 swa.py cvrt "($partId, $1, $2, '$4')" -f 1 2 3 --gpm -c ANAKIN=1 QUI-GON=3
+```
+
+Format:  
+`(` part number of movie `, ` first column `, ` second column `, '` fourth column `')`
+
+Command arguments:
+
     `-f 1 2 3` - only first, second and third movie parts  
     `-gpm` - alias of `--group-per-movie`  
     `-c ANAKIN QUI-GON` - only show these characters speaking to each other  
     `-c ANAKIN=1 QUI-GON=3` - the above, and additionaly rename this characters to the given text following `=`  
-```bash
-$ python3 swa.py cvrt "($partId, $1, $2, '$4')" -f 1 2 3 --gpm -c ANAKIN=1 QUI-GON=3
 
-```
 
 <details>
 <summary>
 View whole output
 </summary>
+    
 ```
 Format: "($partId, $1, $2, '$4')"; files: ['01_phantom_menace.csv', '02_attack_o
 f_the_clones.csv', '03_revenge_of_the_sith.csv']
