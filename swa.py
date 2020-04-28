@@ -139,20 +139,6 @@ def wc_matrix(args):
                             sub_wc.add(sp, spkd, count_words(line))
                 else:
                     sub_wc.add(line[0], line[1], count_words(line))
-            # speaker = line[0].strip().lower()
-            # speaked_to = line[1].strip().lower()
-            # if not args.dont_resolve_groups:
-            #     is_speaker = [matrix[i] for i, x in enumerate(lower_matrix) if x in speaker]
-            #     is_speaked_to = [matrix[i] for i, x in enumerate(lower_matrix) if x in speaked_to]
-            #     if len(is_speaker) > 0 and len(is_speaked_to) > 0:
-            #         for sp in is_speaker:
-            #             for spkd in is_speaked_to:
-            #                 sub_wc.add(sp, spkd, count_words(line))
-            # else:
-            #     is_speaker = [x for x in lower_matrix if x in speaker]
-            #     is_speaked_to = [x for x in lower_matrix if x in speaked_to]
-            #     if len(is_speaker) > 0 and len(is_speaked_to) > 0:
-            #         sub_wc.add(line[0], line[1], count_words(line))
         if args.only_movies or args.group_per_movie:
             if len(sub_wc) > 0:
                 sub_wc.print(path.name)
@@ -169,9 +155,14 @@ def convert(args):
     class Format:
         def __init__(self, format: str):
             self.raw_format = format
-            self.replacers: OrderedDict[int, Tuple[int, int]] = OrderedDict()
+            self.replacers: OrderedDict[int, Format.Replace] = OrderedDict()
             self.placeholder: List[Optional[str]] = []
             self.__parse_raw_format()
+
+        class Replace:
+            def __init__(self, range: Tuple[int, int], quote: Optional[str]=None):
+                self.range = range
+                self.quote = quote
 
         def __parse_raw_format(self):
             found_matches = re.finditer(r'\$((?P<number>[0-9]+)|(?P<part_id>partId))', self.raw_format)
@@ -185,9 +176,16 @@ def convert(args):
                     part_id = int(match.group(1))
                     if part_id not in range(1, 9):
                         raise Exception(f"Invalid column number {part_id} not in range <1-8>!")
-                    self.replacers[part_id] = rnge
+
+                    # check for surrounding quotes for escaping in self.parse
+                    quote = None
+                    if self.raw_format[rnge[0]-1] == self.raw_format[rnge[1]]:
+                        quote = self.raw_format[rnge[1]]
+
+                    self.replacers[part_id] = self.Replace(rnge, quote)
+
                 elif matched_group_name == 'part_id':
-                    self.replacers["part_id"] = rnge
+                    self.replacers["part_id"] = self.Replace(rnge)
                     pass
                 self.placeholder.append(self.raw_format[last_end:rnge[0]])
                 self.placeholder.append(None)
@@ -205,7 +203,13 @@ def convert(args):
                 if key == 'part_id':
                     value = str(file_names.index(file_name) + 1)
                 else:
+                    quote = self.replacers[key].quote
                     value = line[key-1]
+                    if quote:
+                        if args.auto_escape:
+                            value = value.translate(str.maketrans({quote: f"\\{quote}"}))
+                        elif args.sql_escape:
+                            value = value.translate(str.maketrans({"'": "''"}))
                     if mappings:
                         if value in mappings:
                             value = mappings[value]
@@ -215,8 +219,10 @@ def convert(args):
     print(f'Format: "{format}"; files: {[x.name for x in file_paths]}')
     format = Format(format)
 
+    mappings = None
+    characters = None
+    lower_characters = None
     if args.characters:
-        mappings = None
         characters = args.characters
         enum_characters = enumerate(characters)
         is_found_equal_sign = next(((i, x) for i, x in enum_characters if '=' in x), None)
@@ -239,8 +245,14 @@ def convert(args):
         reader = csv.reader(path.open('r', encoding='UTF-8'))
         if args.group_per_movie:
             print(f'{path.name}:')
+        if args.characters:
             for line in reader:
-                rs = are_characters_in_line(line, lower_characters, characters if not args.dont_resolve_groups else None, resolve_groups=not args.dont_resolve_groups)
+                rs = are_characters_in_line(
+                    line,
+                    lower_characters,
+                    characters if not args.dont_resolve_groups else None,
+                    resolve_groups=not args.dont_resolve_groups
+                )
                 if rs:
                     is_speaker = rs[0]
                     is_speaked_to = rs[1]
@@ -251,11 +263,9 @@ def convert(args):
                     print(new_line)
         else:
             for line in reader:
-                new_line = format.parse(line, path.name)
-                print(new_line)
+                new_line = format.parse(line, path.name, mappings)
         if args.group_per_movie:
             print('\n')
-
 
 
 if __name__ == "__main__":
@@ -369,6 +379,19 @@ if __name__ == "__main__":
         action='store_const',
         const=True,
         help="Leave speaking to groups as is"
+    )
+    escape_group = convert_to_format_parser.add_mutually_exclusive_group()
+    escape_group.add_argument(
+        "--auto-escape", "--ae",
+        action='store_const',
+        const=True,
+        help="Escape non-partid variabels if they're surrounded by the same characters on both sides"
+    )
+    escape_group.add_argument(
+        "--sql-escape", "--se",
+        action='store_const',
+        const=True,
+        help="Use '' instead of \\' to escape '"
     )
 
     convert_to_format_parser.set_defaults(func=convert)
